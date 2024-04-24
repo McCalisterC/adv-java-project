@@ -11,11 +11,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameController {
+public class GameController implements Serializable {
     private Parent root;
     private Stage stage;
     private Scene scene;
@@ -66,7 +67,7 @@ public class GameController {
     @FXML
     void onAttack(ActionEvent event) {
         try {
-            gameClient.toServer.writeObject("ATTACK");
+            gameClient.toServer.writeObject("ATTACK: 10");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {

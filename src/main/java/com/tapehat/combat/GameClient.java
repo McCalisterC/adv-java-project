@@ -18,18 +18,17 @@ public class GameClient implements Serializable {
     String IP;
     String userName;
     String opponentUserName;
-    public ObjectOutputStream toServer;
+    public transient ObjectOutputStream toServer;
     int port;
-    ActionEvent event;
+    transient ActionEvent event;
     boolean switchingToBattle = false;
     boolean isPlayersTurn = false;
     GameController gameController;
 
-    public GameClient(String IP, int port, String userName, ActionEvent event) {
+    public GameClient(String IP, int port, String userName) {
         this.IP = IP;
         this.port = port;
         this.userName = userName;
-        this.event = event;
     }
 
     public void start() throws Exception{
@@ -90,21 +89,21 @@ public class GameClient implements Serializable {
 
     public void handleGameStateMessage(String message){
         String playerUserName = message.substring("GAME STATE ".length(), "GAME STATE ".length() + userName.length());
+        int playerHP;
         System.out.println(playerUserName);
         if (playerUserName.equals(userName)) {
-            int playerHP = Integer.parseInt(message.substring("GAME STATE ".length() + userName.length() + 1,
-                    Integer.parseInt(message.substring("GAME STATE ".length() + userName.length() + 3))));
-            int opponentHP = Integer.parseInt(message.substring("GAME STATE ".length() + userName.length()
-                    + 4 + opponentUserName.length() + 1));
+            System.out.println("playerUserName is the same");
+            playerHP = Integer.parseInt(message.substring("GAME STATE ".length() + userName.length() + 1));
+            gameController.player1.setHp(playerHP);
         }
         else {
-            int opponentHP = Integer.parseInt(message.substring("GAME STATE ".length() + opponentUserName.length() + 1,
-                    Integer.parseInt(message.substring("GAME STATE ".length() + opponentUserName.length() + 3))));
-            int playerHP = Integer.parseInt(message.substring("GAME STATE ".length() + opponentUserName.length()
-                    + 4 + userName.length() + 1));
+            System.out.println("playerUserName is not the same");
+            playerHP = Integer.parseInt(message.substring("GAME STATE ".length() + opponentUserName.length() + 1));
+            gameController.player2.setHp(playerHP);
         }
-
-        
+        System.out.println("Player : " + playerHP);
+        Platform.runLater(() ->
+                gameController.SetPlayerHP());
     }
 
     public void handleDamageMessage(String message) {

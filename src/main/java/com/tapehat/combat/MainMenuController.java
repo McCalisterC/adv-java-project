@@ -50,12 +50,14 @@ public class MainMenuController {
     public void onCreateGame(ActionEvent event) throws Exception {
         Thread serverManager = new Thread(new ServerManager("localhost", Integer.parseInt(portNum.getText()), usernameId.getText()));
         serverManager.start();
-        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText(), event);
+        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
+        player.event = event;
         player.start();
     }
 
     public void onJoinGame(ActionEvent event) throws Exception {
-        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText(), event);
+        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
+        player.event = event;
         player.start();
     }
 

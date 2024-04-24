@@ -14,6 +14,7 @@ public class Character {
     public int getHp() {
         return hp;
     }
+    public void setHp(int newHp) { hp = newHp; }
 
     public void setName(String name) { this.name = name; }
     public String getName(){

@@ -67,13 +67,22 @@ public class GameServer {
     }
 
     public int getPlayerHP(int index){
-        return clients.get(index).client.gameController.player1.getHp();
+        return clients.get(index).getHealth();
+    }
+
+    public int getClientIndex(String name){
+        for(ClientHandler client: clients){
+            if (client.username.equals(name)){
+                return clients.indexOf(client);
+            }
+        }
+        return -1;
     }
 
 }
 
 
-class ClientHandler{
+class ClientHandler {
     public Socket socket;
     public String username;
     public ObjectOutputStream oos;
@@ -81,6 +90,7 @@ class ClientHandler{
     public GameServer server;
     public GameClient client;
     private ClientHandler opponent;
+    private int playerHealth;
 
     public ClientHandler(Socket socket, String username, ObjectOutputStream oos, ObjectInputStream ois,
                          GameServer server, GameClient client) throws Exception {
@@ -91,6 +101,7 @@ class ClientHandler{
         this.server = server;
         this.client = client;
         handleMessage();
+        playerHealth = 100;
     }
 
     public void handleMessage() throws IOException {
@@ -101,8 +112,9 @@ class ClientHandler{
                     if(message.startsWith("ATTACK: ")){
                         String damageStr = message.substring("ATTACK: ".length());
                         opponent.oos.writeObject("TAKE DAMAGE: " + damageStr);
-                        server.broadcastMessage("GAME_STATE " + username + ":" + server.getPlayerHP(0) +
-                                " " + opponent.username + ":" + server.getPlayerHP(1));
+                        opponent.playerHealth -= Integer.parseInt(damageStr);
+                        server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
+                        server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
                     }
                 }
             }
@@ -132,4 +144,9 @@ class ClientHandler{
             }
         }
     }
+
+    public int getHealth(){
+        return playerHealth;
+    }
+
 }
