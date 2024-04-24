@@ -14,7 +14,7 @@ public class GameServer {
     int port;
     boolean hasSwitchedToBattle;
     private List<ClientHandler> clients = new ArrayList<>();
-    private int currentTurn = 0;
+    private ServerSocket server;
 
     public GameServer(String IP, int port) {
         this.IP = IP;
@@ -22,7 +22,7 @@ public class GameServer {
     }
 
     public void start() throws Exception {
-        ServerSocket server = new ServerSocket(port);
+        server = new ServerSocket(port);
 
         int clientCount = 0;
         while (true) {
@@ -34,7 +34,7 @@ public class GameServer {
                    client.sendOpponentUsernames(clients);
                    client.getOpponent(clients);
                 }
-                clients.get(currentTurn).startTurn();
+                clients.get(0).startTurn();
             }
             else{
                 System.out.println("Waiting for client");
@@ -79,6 +79,15 @@ public class GameServer {
         return -1;
     }
 
+    public void stopServer() throws IOException {
+        if (server != null) {
+            if (!server.isClosed())
+                broadcastMessage("SERVER SHUTTING DOWN");
+                server.close();
+                clients.clear();
+        }
+    }
+
 }
 
 
@@ -111,10 +120,21 @@ class ClientHandler {
                     String message = (String) ois.readObject();
                     if(message.startsWith("ATTACK: ")){
                         String damageStr = message.substring("ATTACK: ".length());
-                        opponent.oos.writeObject("TAKE DAMAGE: " + damageStr);
-                        opponent.playerHealth -= Integer.parseInt(damageStr);
-                        server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
-                        server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
+                        System.out.println(Integer.parseInt(damageStr));
+                        if (Integer.parseInt(damageStr) > 0){
+                            opponent.playerHealth -= Integer.parseInt(damageStr);
+                            if (opponent.playerHealth <= 0){
+                                server.broadcastMessage("GAME OVER: " + username);
+                            }
+                            server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
+                            server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
+                        }
+                        else if(Integer.parseInt(damageStr) < 0){
+                            playerHealth -= Integer.parseInt(damageStr);
+                            server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
+                            server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
+                        }
+                        opponent.startTurn();
                     }
                 }
             }

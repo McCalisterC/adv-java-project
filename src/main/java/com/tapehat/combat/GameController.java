@@ -38,6 +38,21 @@ public class GameController implements Serializable {
     @FXML
     private Button healButton;
 
+    @FXML
+    private Label winText;
+
+    @FXML
+    private Label loseText;
+
+    @FXML
+    private Button playAgainButton;
+
+    @FXML
+    private Button returnToMenuButton;
+
+    @FXML
+    private Pane endGamePane;
+
     // ... other GUI elements
 
     public Character player1;
@@ -67,7 +82,7 @@ public class GameController implements Serializable {
     @FXML
     void onAttack(ActionEvent event) {
         try {
-            gameClient.toServer.writeObject("ATTACK: 10");
+            gameClient.toServer.writeObject("ATTACK: 50");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -77,10 +92,13 @@ public class GameController implements Serializable {
 
     @FXML
     void onHeal(ActionEvent event) {
-        // Placeholder:
-        player1.heal();
-        player1HpLabel.setText(player1.getName() + " HP: " + player1.getHp());
-        // TODO: Send 'heal' action to the GameServer
+        try {
+            gameClient.toServer.writeObject("ATTACK: -50");
+            gameClient.toServer.flush();
+            DisableButtons();
+        } catch (Exception e) {
+            // Handle the exception
+        }
     }
 
     public void SwitchToBattleScene(ActionEvent event) throws Exception {
@@ -114,5 +132,21 @@ public class GameController implements Serializable {
     public void SetPlayerHP(){
         player1HpLabel.setText(player1.getName() + " HP: " + player1.getHp());
         player2HpLabel.setText(player2.getName() + " HP: " + player2.getHp());
+    }
+
+    public void EndGame(boolean won){
+        DisableButtons();
+        endGamePane.setDisable(false);
+        endGamePane.setVisible(true);
+        if (won){
+            winText.setOpacity(1);
+        }
+        else{
+            loseText.setOpacity(1);
+        }
+        playAgainButton.setOpacity(1);
+        playAgainButton.setDisable(false);
+        returnToMenuButton.setOpacity(1);
+        returnToMenuButton.setDisable(false);
     }
 }

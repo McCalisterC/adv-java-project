@@ -38,6 +38,30 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
+            <Pane fx:id="endGamePane" disable="true" layoutX="123.0" layoutY="91.0" prefHeight="539.0" prefWidth="1035.0" style="-fx-background-color: black;" visible="false">
+               <children>
+                  <Label fx:id="loseText" layoutX="320.0" layoutY="109.0" opacity="0.0" text="YOU LOSE!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="78.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="winText" layoutX="320.0" layoutY="109.0" opacity="0.0" text="YOU WIN!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="78.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="playAgainButton" defaultButton="true" layoutX="214.0" layoutY="349.0" onAction="#onAttack" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Play Again">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" onAction="#onAttack" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Return To Menu">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
          </children>
       </Pane>
    </children>

@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class MainMenuController {
     private Parent root;
@@ -17,6 +19,8 @@ public class MainMenuController {
     private Scene scene;
     private boolean usernameValid;
     private boolean portValid;
+    private ServerManager serverManager;
+    private GameClient player;
 
     @FXML
     private Button createGameID;
@@ -25,10 +29,16 @@ public class MainMenuController {
     private Button joinGameID;
 
     @FXML
+    private Button cancelId;
+
+    @FXML
     private TextField portNum;
 
     @FXML
     private TextField usernameId;
+
+    @FXML
+    private TextField passwordText;
 
     @FXML
     void onStartButton(ActionEvent event) throws Exception {
@@ -48,17 +58,35 @@ public class MainMenuController {
     }
 
     public void onCreateGame(ActionEvent event) throws Exception {
-        Thread serverManager = new Thread(new ServerManager("localhost", Integer.parseInt(portNum.getText()), usernameId.getText()));
-        serverManager.start();
-        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
+        serverManager = new ServerManager("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
+        Thread thread = new Thread(serverManager);
+        thread.start();
+        player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
         player.event = event;
         player.start();
+        disableUICreate();
+        System.out.println(serverManager.IP + " " + serverManager.port);
+        System.out.println(player.IP + " " + player.port);
     }
 
     public void onJoinGame(ActionEvent event) throws Exception {
         GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
         player.event = event;
         player.start();
+    }
+
+    public void disableUICreate(){
+        createGameID.setDisable(true);
+        portNum.setDisable(true);
+        usernameId.setDisable(true);
+        passwordText.setDisable(true);
+    }
+
+    public void enableUICreate(){
+        createGameID.setDisable(false);
+        portNum.setDisable(false);
+        usernameId.setDisable(false);
+        passwordText.setDisable(false);
     }
 
     public void usernameValidation(){
@@ -120,6 +148,16 @@ public class MainMenuController {
         }
     }
 
+    public void cancelButton(ActionEvent event) throws Exception {
+        if(createGameID.isDisabled()){
+            serverManager.stopServer();
+            enableUICreate();
+        }
+        else {
+            SwitchToMainMenuScene(event);
+        }
+    }
+
     public void SwitchToBattleScene(ActionEvent event) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("battle_screen.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -157,6 +195,7 @@ class ServerManager implements Runnable {
     String IP;
     String userName;
     int port;
+    GameServer server;
 
     public ServerManager(String IP, int port, String userName) {
         this.IP = IP;
@@ -167,11 +206,16 @@ class ServerManager implements Runnable {
     @Override
     public void run(){
         try {
-            GameServer server = new GameServer(IP, port);
+            server = new GameServer(IP, port);
             server.start();
         }
         catch (Exception ex){
             System.out.println("Error creating server: " + ex);
         }
+    }
+
+    public void stopServer() throws IOException {
+        server.stopServer();
+        Thread.currentThread().interrupt();
     }
 }

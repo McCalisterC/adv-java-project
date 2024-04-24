@@ -8,9 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -23,6 +25,7 @@ public class GameClient implements Serializable {
     transient ActionEvent event;
     boolean switchingToBattle = false;
     boolean isPlayersTurn = false;
+    boolean gameOver = false;
     GameController gameController;
 
     public GameClient(String IP, int port, String userName) {
@@ -63,16 +66,27 @@ public class GameClient implements Serializable {
                             });
                         }
                         else if(message.equals("START TURN")){
-                            isPlayersTurn = true;
-                            Platform.runLater(() -> {
-                                gameController.EnableButtons();
-                            });
-                        }
-                        else if (message.startsWith("TAKE DAMAGE: ")) {
-                            handleDamageMessage(message);
+                            if(!gameOver){
+                                isPlayersTurn = true;
+                                Platform.runLater(() -> {
+                                    gameController.EnableButtons();
+                                });
+                            }
                         }
                         else if (message.startsWith("GAME STATE ")){
                             handleGameStateMessage(message);
+                        }
+                        else if (message.startsWith("GAME OVER: ")){
+                            System.out.println(message.substring("GAME OVER: ".length()));
+                            if (message.substring("GAME OVER: ".length()).equals(userName)){
+                                handleEndGameMessage(true);
+                            }
+                            else {
+                                handleEndGameMessage(false);
+                            }
+                        }
+                        else if (message.equals("SERVER SHUTTING DOWN")){
+                            closeConnection(socket);
                         }
                         else{
                             opponentUserName = message;
@@ -85,6 +99,11 @@ public class GameClient implements Serializable {
         } catch (Exception ex) {
             System.out.println("Error connecting to server:" + ex);
         }
+    }
+
+    public void handleEndGameMessage(boolean won){
+        gameOver = true;
+        gameController.EndGame(won);
     }
 
     public void handleGameStateMessage(String message){
@@ -106,24 +125,6 @@ public class GameClient implements Serializable {
                 gameController.SetPlayerHP());
     }
 
-    public void handleDamageMessage(String message) {
-        String damageStr = message.substring("TAKE DAMAGE: ".length());
-
-        try {
-            int damage = Integer.parseInt(damageStr);
-
-            // Valid damage!
-            applyDamage(damage);
-
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid damage message format: " + message);
-        }
-    }
-
-    public void applyDamage(int damage) {
-        gameController.player1.takeDamage(damage);
-    }
-
     public void SwitchToBattleScene(ActionEvent event) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("battle_screen.fxml"));
         Parent root = loader.load();
@@ -135,5 +136,7 @@ public class GameClient implements Serializable {
         stage.show();
     }
 
-    // ... Methods for sending actions, receiving game state updates...
+    public void closeConnection(Socket socket) throws Exception {
+        socket.close();
+    }
 }
