@@ -9,8 +9,5 @@
         <module name="combat" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="combat" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

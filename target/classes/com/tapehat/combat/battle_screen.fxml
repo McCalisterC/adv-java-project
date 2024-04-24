@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tapehat.combat.GameController">
    <children>
        <Pane fx:id="battleScreen" prefHeight="720.0" prefWidth="1280.0">
@@ -21,8 +20,24 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Button fx:id="attackButton" layoutX="134.0" layoutY="201.0" onAction="#onAttack" prefHeight="25.0" prefWidth="60.0" text="Attack" />
-              <Button fx:id="healButton" layoutX="134.0" layoutY="265.0" onAction="#onHeal" prefHeight="25.0" prefWidth="60.0" text="Heal" />
+              <Button fx:id="attackButton" layoutX="96.0" layoutY="153.0" onAction="#onAttack" prefHeight="57.0" prefWidth="137.0" text="Attack">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></Button>
+              <Button fx:id="healButton" layoutX="93.0" layoutY="252.0" onAction="#onHeal" prefHeight="57.0" prefWidth="144.0" text="Heal">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></Button>
+            <Label fx:id="player1HpLabel1" alignment="CENTER" layoutX="14.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 MP: 100">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="player2HpLabel1" alignment="CENTER" layoutX="966.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>

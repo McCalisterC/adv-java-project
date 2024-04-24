@@ -11,6 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameController {
     private Parent root;
@@ -26,6 +29,8 @@ public class GameController {
     @FXML
     private Label player2HpLabel;
 
+    private List<Button> buttons = new ArrayList<Button>();
+
     @FXML
     private Button attackButton;
 
@@ -34,16 +39,20 @@ public class GameController {
 
     // ... other GUI elements
 
-    private Character player1;
-    private Character player2;
+    public Character player1;
+    public Character player2;
     private GameClient gameClient; // Assuming you have your GameClient handling connection
 
     @FXML
     public void initialize() {
-
     }
 
     public void start(GameClient gameClient){
+        buttons.add(attackButton);
+        buttons.add(healButton);
+
+        DisableButtons();
+
         this.gameClient = gameClient;
 
         player1 = new Character(gameClient.userName, 100);
@@ -56,17 +65,20 @@ public class GameController {
 
     @FXML
     void onAttack(ActionEvent event) {
-        // Placeholder:
-        player2.takeDamage(10);
-        player2HpLabel.setText("Player 2 HP: " + player2.getHp());
-        // TODO: Send 'attack' action to the GameServer
+        try {
+            gameClient.toServer.writeObject("ATTACK");
+            gameClient.toServer.flush();
+            DisableButtons();
+        } catch (Exception e) {
+            // Handle the exception
+        }
     }
 
     @FXML
     void onHeal(ActionEvent event) {
         // Placeholder:
         player1.heal();
-        player1HpLabel.setText("Player 1 HP: " + player1.getHp());
+        player1HpLabel.setText(player1.getName() + " HP: " + player1.getHp());
         // TODO: Send 'heal' action to the GameServer
     }
 
@@ -84,5 +96,22 @@ public class GameController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void DisableButtons(){
+        for(Button b : buttons){
+            b.setDisable(true);
+        }
+    }
+
+    public void EnableButtons(){
+        for(Button b : buttons){
+            b.setDisable(false);
+        }
+    }
+
+    public void SetPlayerHP(){
+        player1HpLabel.setText(player1.getName() + " HP: " + player1.getHp());
+        player2HpLabel.setText(player2.getName() + " HP: " + player2.getHp());
     }
 }
