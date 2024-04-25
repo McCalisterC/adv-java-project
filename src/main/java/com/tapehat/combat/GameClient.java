@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class GameClient implements Serializable {
         this.userName = userName;
     }
 
-    public void start() throws Exception{
+    public void start(Text feedback) throws Exception{
         try {
             Socket socket = new Socket(IP, port);
 
@@ -106,6 +107,7 @@ public class GameClient implements Serializable {
             }).start();
         } catch (Exception ex) {
             System.out.println("Error connecting to server:" + ex);
+            feedback.setText("Could not connect to server, please try again!");
         }
     }
 

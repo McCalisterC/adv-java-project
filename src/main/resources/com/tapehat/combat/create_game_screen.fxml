@@ -49,6 +49,11 @@
                </font>
             </Text>
             <TextField fx:id="usernameId" layoutX="498.0" layoutY="163.0" prefHeight="32.0" prefWidth="412.0" />
+            <Text fx:id="feedbackId" fill="RED" layoutX="184.0" layoutY="586.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="954.3999938964841">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
             </children>
         </Pane>
     </children>

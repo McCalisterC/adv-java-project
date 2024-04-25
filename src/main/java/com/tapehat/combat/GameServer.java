@@ -14,7 +14,7 @@ public class GameServer {
     int port;
     boolean hasSwitchedToBattle;
     private List<ClientHandler> clients = new ArrayList<>();
-    private ServerSocket server;
+    public ServerSocket server;
 
     public GameServer(String IP, int port) {
         this.IP = IP;

@@ -7,10 +7,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 
 public class MainMenuController {
@@ -45,6 +48,9 @@ public class MainMenuController {
     public TextField ipText;
 
     @FXML
+    public Text feedbackId;
+
+    @FXML
     void onQuitButton(ActionEvent event) {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.close();
@@ -63,16 +69,22 @@ public class MainMenuController {
         thread.start();
         player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
         player.event = event;
-        player.start();
+        player.start(feedbackId);
         disableUICreate();
         System.out.println(serverManager.IP + " " + serverManager.port);
         System.out.println(player.IP + " " + player.port);
+        feedbackId.setText("Created Game, IP for Opponent is: " + InetAddress.getLocalHost().getHostAddress());
     }
 
-    public void onJoinGame(ActionEvent event) throws Exception {
-        GameClient player = new GameClient(ipText.getText(), Integer.parseInt(portNum.getText()), usernameId.getText());
-        player.event = event;
-        player.start();
+    public void onJoinGame(ActionEvent event) {
+        try {
+            GameClient player = new GameClient(ipText.getText(), Integer.parseInt(portNum.getText()), usernameId.getText());
+            player.event = event;
+            player.start(feedbackId);
+        }
+        catch (Exception e) {
+            feedbackId.setText("Could not connect to server, try again!");
+        }
     }
 
     public void disableUICreate(){
