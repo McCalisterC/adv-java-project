@@ -20,24 +20,68 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Button fx:id="attackButton" layoutX="96.0" layoutY="153.0" onAction="#onAttack" prefHeight="57.0" prefWidth="137.0" text="Attack">
+              <Button fx:id="attackButton" layoutX="66.0" layoutY="145.0" onAction="#onAttack" prefHeight="57.0" prefWidth="200.0" text="Attack">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-              <Button fx:id="healButton" layoutX="93.0" layoutY="252.0" onAction="#onHeal" prefHeight="57.0" prefWidth="144.0" text="Heal">
+              <Button fx:id="healButton" layoutX="63.0" layoutY="477.0" onAction="#onHeal" prefHeight="57.0" prefWidth="200.0" text="Heal">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Label fx:id="player1HpLabel1" alignment="CENTER" layoutX="14.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 MP: 100">
+            <Label fx:id="player1MpLabel" alignment="CENTER" layoutX="14.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 MP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="player2HpLabel1" alignment="CENTER" layoutX="966.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
+            <Label fx:id="player2MpLabel" alignment="CENTER" layoutX="966.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
+            <Pane fx:id="endGamePane" disable="true" layoutX="123.0" layoutY="91.0" prefHeight="539.0" prefWidth="1035.0" style="-fx-background-color: black;" visible="false">
+               <children>
+                  <Label fx:id="loseText" layoutX="320.0" layoutY="109.0" opacity="0.0" text="YOU LOSE!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="78.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="winText" layoutX="320.0" layoutY="109.0" opacity="0.0" text="YOU WIN!" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="78.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="playAgainButton" defaultButton="true" layoutX="214.0" layoutY="349.0" onAction="#onAttack" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Play Again">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" onAction="#onAttack" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Return To Menu">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+            <Label fx:id="player1HpLabel2" alignment="CENTER" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="player1HpLabel21" alignment="CENTER" layoutX="14.0" layoutY="346.0" prefHeight="30.0" prefWidth="300.0" text="Mana Skills">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button fx:id="braceButton" layoutX="66.0" layoutY="236.0" onAction="#onBrace" prefHeight="57.0" prefWidth="200.0" text="Brace">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="mpAttackButton" layoutX="63.0" layoutY="388.0" onAction="#onMPAttack" prefHeight="57.0" prefWidth="200.0" text="Magic Attack">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

@@ -28,7 +28,13 @@ public class GameController implements Serializable {
     private Label player1HpLabel;
 
     @FXML
+    private Label player1MpLabel;
+
+    @FXML
     private Label player2HpLabel;
+
+    @FXML
+    private Label player2MpLabel;
 
     private List<Button> buttons = new ArrayList<Button>();
 
@@ -37,6 +43,12 @@ public class GameController implements Serializable {
 
     @FXML
     private Button healButton;
+
+    @FXML
+    private Button braceButton;
+
+    @FXML
+    private Button mpAttackButton;
 
     @FXML
     private Label winText;
@@ -66,13 +78,15 @@ public class GameController implements Serializable {
     public void start(GameClient gameClient){
         buttons.add(attackButton);
         buttons.add(healButton);
+        buttons.add(braceButton);
+        buttons.add(mpAttackButton);
 
         DisableButtons();
 
         this.gameClient = gameClient;
 
-        player1 = new Character(gameClient.userName, 100);
-        player2 = new Character(gameClient.opponentUserName, 100);
+        player1 = new Character(gameClient.userName, 100, 100);
+        player2 = new Character(gameClient.opponentUserName, 100, 100);
 
         // Initialize HP labels
         player1HpLabel.setText(player1.getName() + " HP: " + player1.getHp());
@@ -82,7 +96,20 @@ public class GameController implements Serializable {
     @FXML
     void onAttack(ActionEvent event) {
         try {
-            gameClient.toServer.writeObject("ATTACK: 50");
+            gameClient.toServer.writeObject("ATTACK: 10");
+            gameClient.toServer.flush();
+            DisableButtons();
+        } catch (Exception e) {
+            // Handle the exception
+        }
+    }
+
+    @FXML
+    void onMPAttack(ActionEvent event) {
+        try {
+            gameClient.toServer.writeObject("MP ATTACK: 50");
+            gameClient.toServer.flush();
+            gameClient.toServer.writeObject("ATTACK: 30");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -94,6 +121,17 @@ public class GameController implements Serializable {
     void onHeal(ActionEvent event) {
         try {
             gameClient.toServer.writeObject("ATTACK: -50");
+            gameClient.toServer.flush();
+            DisableButtons();
+        } catch (Exception e) {
+            // Handle the exception
+        }
+    }
+
+    @FXML
+    void onBrace(ActionEvent event) {
+        try {
+            gameClient.toServer.writeObject("BRACE");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -134,6 +172,11 @@ public class GameController implements Serializable {
         player2HpLabel.setText(player2.getName() + " HP: " + player2.getHp());
     }
 
+    public void SetPlayerMP(){
+        player1MpLabel.setText(player1.getName() + " MP: " + player1.getMp());
+        player2MpLabel.setText(player2.getName() + " MP: " + player2.getMp());
+    }
+
     public void EndGame(boolean won){
         DisableButtons();
         endGamePane.setDisable(false);
@@ -148,5 +191,12 @@ public class GameController implements Serializable {
         playAgainButton.setDisable(false);
         returnToMenuButton.setOpacity(1);
         returnToMenuButton.setDisable(false);
+    }
+
+    public void CheckMPButtons(){
+        if(player1.getMp() < 50){
+            healButton.setDisable(true);
+            mpAttackButton.setDisable(true);
+        }
     }
 }

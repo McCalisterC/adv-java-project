@@ -70,11 +70,15 @@ public class GameClient implements Serializable {
                                 isPlayersTurn = true;
                                 Platform.runLater(() -> {
                                     gameController.EnableButtons();
+                                    gameController.CheckMPButtons();
                                 });
                             }
                         }
                         else if (message.startsWith("GAME STATE ")){
                             handleGameStateMessage(message);
+                        }
+                        else if (message.startsWith("MP STATE ")){
+                            handleMPStateMessage(message);
                         }
                         else if (message.startsWith("GAME OVER: ")){
                             System.out.println(message.substring("GAME OVER: ".length()));
@@ -120,9 +124,28 @@ public class GameClient implements Serializable {
             playerHP = Integer.parseInt(message.substring("GAME STATE ".length() + opponentUserName.length() + 1));
             gameController.player2.setHp(playerHP);
         }
-        System.out.println("Player : " + playerHP);
+        System.out.println("Player : " + playerHP + "HP");
         Platform.runLater(() ->
                 gameController.SetPlayerHP());
+    }
+
+    public void handleMPStateMessage(String message){
+        String playerUserName = message.substring("MP STATE ".length(), "MP STATE ".length() + userName.length());
+        int playerMP;
+        System.out.println(playerUserName);
+        if (playerUserName.equals(userName)) {
+            System.out.println("playerUserName is the same");
+            playerMP = Integer.parseInt(message.substring("MP STATE ".length() + userName.length() + 1));
+            gameController.player1.setMp(playerMP);
+        }
+        else {
+            System.out.println("playerUserName is not the same");
+            playerMP = Integer.parseInt(message.substring("MP STATE ".length() + opponentUserName.length() + 1));
+            gameController.player2.setMp(playerMP);
+        }
+        System.out.println("Player : " + playerMP + "MP");
+        Platform.runLater(() ->
+                gameController.SetPlayerMP());
     }
 
     public void SwitchToBattleScene(ActionEvent event) throws Exception {

@@ -70,6 +70,10 @@ public class GameServer {
         return clients.get(index).getHealth();
     }
 
+    public int getPlayerMP(int index){
+        return clients.get(index).getMP();
+    }
+
     public int getClientIndex(String name){
         for(ClientHandler client: clients){
             if (client.username.equals(name)){
@@ -100,6 +104,7 @@ class ClientHandler {
     public GameClient client;
     private ClientHandler opponent;
     private int playerHealth;
+    private int playerMP;
 
     public ClientHandler(Socket socket, String username, ObjectOutputStream oos, ObjectInputStream ois,
                          GameServer server, GameClient client) throws Exception {
@@ -111,6 +116,7 @@ class ClientHandler {
         this.client = client;
         handleMessage();
         playerHealth = 100;
+        playerMP = 100;
     }
 
     public void handleMessage() throws IOException {
@@ -118,6 +124,14 @@ class ClientHandler {
             try {
                 while(true){
                     String message = (String) ois.readObject();
+                    if(message.startsWith("MP ATTACK: ")){
+                        String mpStr = message.substring("MP ATTACK: ".length());
+                        System.out.println(Integer.parseInt(mpStr));
+                        if (Integer.parseInt(mpStr) > 0){
+                            playerMP -= Integer.parseInt(mpStr);
+                            server.broadcastMessage("MP STATE " + username + ":" + server.getPlayerMP(server.getClientIndex(username)));
+                        }
+                    }
                     if(message.startsWith("ATTACK: ")){
                         String damageStr = message.substring("ATTACK: ".length());
                         System.out.println(Integer.parseInt(damageStr));
@@ -167,6 +181,10 @@ class ClientHandler {
 
     public int getHealth(){
         return playerHealth;
+    }
+
+    public int getMP(){
+        return playerMP;
     }
 
 }

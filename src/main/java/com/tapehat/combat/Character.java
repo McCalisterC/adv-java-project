@@ -3,11 +3,13 @@ package com.tapehat.combat;
 public class Character {
 
     private int hp;
+    private int mp;
     private String name;
 
-    public Character(String name, int initialHp) {
+    public Character(String name, int initialHp, int initialMp) {
         this.name = name;
         this.hp = initialHp;
+        this.mp = initialMp;
     }
 
     // Getters and Setters for hp & name
@@ -15,6 +17,9 @@ public class Character {
         return hp;
     }
     public void setHp(int newHp) { hp = newHp; }
+
+    public int getMp() { return mp; }
+    public void setMp(int newMp) { mp = newMp; }
 
     public void setName(String name) { this.name = name; }
     public String getName(){
