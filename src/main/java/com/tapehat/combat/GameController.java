@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class GameController implements Serializable {
     private Parent root;
     private Stage stage;
     private Scene scene;
+    public boolean won;
 
     @FXML
     private Pane battleScreen; // Connect to the battle screen in your FXML
@@ -71,10 +73,6 @@ public class GameController implements Serializable {
     public Character player2;
     private GameClient gameClient; // Assuming you have your GameClient handling connection
 
-    @FXML
-    public void initialize() {
-    }
-
     public void start(GameClient gameClient){
         buttons.add(attackButton);
         buttons.add(healButton);
@@ -109,7 +107,7 @@ public class GameController implements Serializable {
         try {
             gameClient.toServer.writeObject("MP ATTACK: 50");
             gameClient.toServer.flush();
-            gameClient.toServer.writeObject("ATTACK: 30");
+            gameClient.toServer.writeObject("ATTACK: 100");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -120,6 +118,8 @@ public class GameController implements Serializable {
     @FXML
     void onHeal(ActionEvent event) {
         try {
+            gameClient.toServer.writeObject("MP ATTACK: 50");
+            gameClient.toServer.flush();
             gameClient.toServer.writeObject("ATTACK: -50");
             gameClient.toServer.flush();
             DisableButtons();
@@ -177,15 +177,17 @@ public class GameController implements Serializable {
         player2MpLabel.setText(player2.getName() + " MP: " + player2.getMp());
     }
 
-    public void EndGame(boolean won){
+    public void EndGame(boolean endGame){
         DisableButtons();
         endGamePane.setDisable(false);
         endGamePane.setVisible(true);
-        if (won){
+        if (endGame){
             winText.setOpacity(1);
+            won = true;
         }
         else{
             loseText.setOpacity(1);
+            won = false;
         }
         playAgainButton.setOpacity(1);
         playAgainButton.setDisable(false);
@@ -193,10 +195,29 @@ public class GameController implements Serializable {
         returnToMenuButton.setDisable(false);
     }
 
+    public void onPlayAgain(ActionEvent event) throws IOException {
+        gameClient.toServer.writeObject("PLAY AGAIN");
+    }
+
+    public void Restart() throws IOException {
+        endGamePane.setDisable(true);
+        endGamePane.setVisible(false);
+        winText.setOpacity(0);
+        loseText.setOpacity(0);
+        playAgainButton.setOpacity(0);
+        playAgainButton.setDisable(true);
+        returnToMenuButton.setOpacity(0);
+        returnToMenuButton.setDisable(true);
+    }
+
     public void CheckMPButtons(){
         if(player1.getMp() < 50){
             healButton.setDisable(true);
             mpAttackButton.setDisable(true);
         }
+    }
+
+    public void updateDescriptionText(String text){
+        //descriptionText.setText(text);
     }
 }

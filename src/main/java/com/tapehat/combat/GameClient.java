@@ -23,7 +23,6 @@ public class GameClient implements Serializable {
     public transient ObjectOutputStream toServer;
     int port;
     transient ActionEvent event;
-    boolean switchingToBattle = false;
     boolean isPlayersTurn = false;
     boolean gameOver = false;
     GameController gameController;
@@ -53,7 +52,7 @@ public class GameClient implements Serializable {
                         System.out.println("Waiting for user...");
                         String message = (String) fromServer.readObject();
                         System.out.println("Received message: " + message);
-                        if (message.equals("SWITCHSCENE") && !switchingToBattle) {
+                        if (message.equals("SWITCHSCENE")) {
                             // Trigger transition to battle_screen.fxml
                             Platform.runLater(() -> {
                                 try {
@@ -62,7 +61,6 @@ public class GameClient implements Serializable {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                switchingToBattle = true;
                             });
                         }
                         else if(message.equals("START TURN")){
@@ -92,6 +90,12 @@ public class GameClient implements Serializable {
                         else if (message.equals("SERVER SHUTTING DOWN")){
                             closeConnection(socket);
                         }
+                        else if (message.equals("RESTART GAME")){
+                            Restart();
+                        }
+                        else if (message.startsWith("GAME DESCRIPTION: ")){
+                            handleDescriptionMessage(message);
+                        }
                         else{
                             opponentUserName = message;
                         }
@@ -103,6 +107,11 @@ public class GameClient implements Serializable {
         } catch (Exception ex) {
             System.out.println("Error connecting to server:" + ex);
         }
+    }
+
+    public void handleDescriptionMessage(String message){
+        String updatedMessage = message.substring("GAME DESCRIPTION: ".length());
+        gameController.updateDescriptionText(updatedMessage);
     }
 
     public void handleEndGameMessage(boolean won){
@@ -157,6 +166,28 @@ public class GameClient implements Serializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void Restart() throws IOException {
+        gameController.DisableButtons();
+        gameController.player1 = new Character(gameController.player1.getName(), 100, 100);
+        gameController.player2 = new Character(gameController.player2.getName(), 100, 100);
+        Platform.runLater(() -> {
+            gameController.SetPlayerHP();
+            gameController.SetPlayerMP();
+            try {
+                gameController.Restart();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        gameOver = false;
+        if (gameController.won){
+            isPlayersTurn = true;
+            gameController.EnableButtons();
+            gameController.CheckMPButtons();
+            gameController.won = false;
+        }
     }
 
     public void closeConnection(Socket socket) throws Exception {

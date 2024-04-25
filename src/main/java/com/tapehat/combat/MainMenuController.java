@@ -45,11 +45,6 @@ public class MainMenuController {
     public TextField ipText;
 
     @FXML
-    void onStartButton(ActionEvent event) throws Exception {
-        SwitchToBattleScene(event);
-    }
-
-    @FXML
     void onQuitButton(ActionEvent event) {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.close();

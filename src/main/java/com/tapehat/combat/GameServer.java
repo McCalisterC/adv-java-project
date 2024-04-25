@@ -105,6 +105,8 @@ class ClientHandler {
     private ClientHandler opponent;
     private int playerHealth;
     private int playerMP;
+    private boolean playerBrace;
+    private boolean playAgain;
 
     public ClientHandler(Socket socket, String username, ObjectOutputStream oos, ObjectInputStream ois,
                          GameServer server, GameClient client) throws Exception {
@@ -117,6 +119,8 @@ class ClientHandler {
         handleMessage();
         playerHealth = 100;
         playerMP = 100;
+        playerBrace = false;
+        playAgain = false;
     }
 
     public void handleMessage() throws IOException {
@@ -127,28 +131,61 @@ class ClientHandler {
                     if(message.startsWith("MP ATTACK: ")){
                         String mpStr = message.substring("MP ATTACK: ".length());
                         System.out.println(Integer.parseInt(mpStr));
-                        if (Integer.parseInt(mpStr) > 0){
-                            playerMP -= Integer.parseInt(mpStr);
-                            server.broadcastMessage("MP STATE " + username + ":" + server.getPlayerMP(server.getClientIndex(username)));
-                        }
+                        playerMP -= Integer.parseInt(mpStr);
+                        server.broadcastMessage("MP STATE " + username + ":" + server.getPlayerMP(server.getClientIndex(username)));
                     }
                     if(message.startsWith("ATTACK: ")){
                         String damageStr = message.substring("ATTACK: ".length());
                         System.out.println(Integer.parseInt(damageStr));
                         if (Integer.parseInt(damageStr) > 0){
-                            opponent.playerHealth -= Integer.parseInt(damageStr);
+                            if (opponent.playerBrace)
+                                opponent.playerHealth -= Integer.parseInt(damageStr) / 2;
+                            else
+                                opponent.playerHealth -= Integer.parseInt(damageStr);
                             if (opponent.playerHealth <= 0){
                                 server.broadcastMessage("GAME OVER: " + username);
                             }
                             server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
                             server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
+                            server.broadcastMessage("GAME DESCRIPTION: " + username + " attacked " + opponent.username + " for " + damageStr + " damage!");
                         }
                         else if(Integer.parseInt(damageStr) < 0){
-                            playerHealth -= Integer.parseInt(damageStr);
+                            if (playerHealth - Integer.parseInt(damageStr) >= 100)
+                                playerHealth = 100;
+                            else
+                                playerHealth -= Integer.parseInt(damageStr);
                             server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
                             server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
                         }
                         opponent.startTurn();
+                        if (opponent.playerBrace){
+                            opponent.playerBrace = false;
+                        }
+                    }
+                    if (message.equals("BRACE")){
+                        playerBrace = true;
+                        if (playerMP + 10 >= 100){
+                            playerMP = 100;
+                        }
+                        else
+                            playerMP += 10;
+                        server.broadcastMessage("MP STATE " + username + ":" + server.getPlayerMP(server.getClientIndex(username)));
+                        opponent.startTurn();
+                        if (opponent.playerBrace){
+                            opponent.playerBrace = false;
+                        }
+                    }
+                    if (message.equals("PLAY AGAIN")){
+                        if (opponent.playAgain){
+                            opponent.playAgain = false;
+                            server.broadcastMessage("RESTART GAME");
+                            playerHealth = 100;
+                            playerMP = 100;
+                            opponent.playerHealth = 100;
+                            opponent.playerMP = 100;
+                        }
+                        else
+                            playAgain = true;
                     }
                 }
             }
