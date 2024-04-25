@@ -19,6 +19,7 @@ public class MainMenuController {
     private Scene scene;
     private boolean usernameValid;
     private boolean portValid;
+    private boolean ipValid;
     private ServerManager serverManager;
     private GameClient player;
 
@@ -41,6 +42,9 @@ public class MainMenuController {
     private TextField passwordText;
 
     @FXML
+    public TextField ipText;
+
+    @FXML
     void onStartButton(ActionEvent event) throws Exception {
         SwitchToBattleScene(event);
     }
@@ -55,6 +59,7 @@ public class MainMenuController {
     public void initialize(){
         portValidation();
         usernameValidation();
+        ipValidation();
     }
 
     public void onCreateGame(ActionEvent event) throws Exception {
@@ -70,7 +75,7 @@ public class MainMenuController {
     }
 
     public void onJoinGame(ActionEvent event) throws Exception {
-        GameClient player = new GameClient("localhost", Integer.parseInt(portNum.getText()), usernameId.getText());
+        GameClient player = new GameClient(ipText.getText(), Integer.parseInt(portNum.getText()), usernameId.getText());
         player.event = event;
         player.start();
     }
@@ -94,11 +99,21 @@ public class MainMenuController {
             usernameId.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue.length() > 3){
                     usernameValid = true;
-                    if(portValid){
-                        if(createGameID != null)
-                            createGameID.setDisable(false); // Valid port, enable button
-                        else
-                            joinGameID.setDisable(false);
+                    if (joinGameID != null){
+                        if(portValid && ipValid){
+                            if(createGameID != null)
+                                createGameID.setDisable(false); // Valid port, enable button
+                            else
+                                joinGameID.setDisable(false);
+                        }
+                    }
+                    else {
+                        if(portValid){
+                            if(createGameID != null)
+                                createGameID.setDisable(false); // Valid port, enable button
+                            else
+                                joinGameID.setDisable(false);
+                        }
                     }
                 }
                 else{
@@ -118,16 +133,26 @@ public class MainMenuController {
                 if (!newValue.matches("\\d*")) { // Only allow digits
                     portNum.setText(oldValue); // Revert to old value if invalid
                 } else {
-                    if(newValue.length() > 0){
+                    if(!newValue.isEmpty()){
                         // Check for valid port range
                         int port = Integer.parseInt(newValue);
                         if (port >= 0 && port <= 65535) {
                             portValid = true;
-                            if (usernameValid)
-                                if(createGameID != null)
-                                    createGameID.setDisable(false); // Valid port, enable button
-                                else
-                                    joinGameID.setDisable(false);
+                            if (joinGameID != null){
+                                if (usernameValid && ipValid)
+                                    if(createGameID != null)
+                                        createGameID.setDisable(false); // Valid port, enable button
+                                    else
+                                        joinGameID.setDisable(false);
+                            }
+                            else {
+                                if (usernameValid)
+                                    if(createGameID != null)
+                                        createGameID.setDisable(false); // Valid port, enable button
+                                    else
+                                        joinGameID.setDisable(false);
+                            }
+
                         } else {
                             if(port >= 65535){
                                 portNum.setText(oldValue);
@@ -143,6 +168,29 @@ public class MainMenuController {
                         else
                             joinGameID.setDisable(true);
                     }
+                }
+            });
+        }
+    }
+
+    public void ipValidation(){
+        if(ipText != null){
+            ipText.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.isEmpty()){
+                    ipValid = true;
+                    if(portValid && usernameValid){
+                        if(createGameID != null)
+                            createGameID.setDisable(false); // Valid port, enable button
+                        else
+                            joinGameID.setDisable(false);
+                    }
+                }
+                else{
+                    if(createGameID != null)
+                        createGameID.setDisable(true); // Valid port, enable button
+                    else
+                        joinGameID.setDisable(true);
+                    ipValid = false;
                 }
             });
         }

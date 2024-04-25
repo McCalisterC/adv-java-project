@@ -13,19 +13,19 @@
                   <Font size="24.0" />
               </font>
           </Text>
-      <Text layoutX="333.0" layoutY="296.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port Number:">
+      <Text layoutX="258.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port Number:" textAlignment="RIGHT" wrappingWidth="217.98046874999994">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="258.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password (Optional):">
+      <Text layoutX="258.0" layoutY="484.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password (Optional):" textAlignment="RIGHT">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <TextField fx:id="portNum" layoutX="519.0" layoutY="275.0" prefHeight="32.0" prefWidth="412.0" />
-      <TextField fx:id="passwordText" layoutX="519.0" layoutY="365.0" prefHeight="32.0" prefWidth="412.0" />
-      <Button fx:id="joinGameID" disable="true" layoutX="475.0" layoutY="476.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="51.0" prefWidth="184.0" text="Join Game">
+      <TextField fx:id="portNum" layoutX="519.0" layoutY="365.0" prefHeight="32.0" prefWidth="412.0" />
+      <TextField fx:id="passwordText" layoutX="519.0" layoutY="455.0" prefHeight="32.0" prefWidth="412.0" />
+      <Button fx:id="joinGameID" disable="true" layoutX="482.0" layoutY="554.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="51.0" prefWidth="184.0" text="Join Game">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -35,16 +35,22 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="cancelId" layoutX="777.0" layoutY="476.0" mnemonicParsing="false" onAction="#SwitchToMainMenuScene" prefHeight="51.0" prefWidth="184.0" text="Cancel">
+      <Button fx:id="cancelId" layoutX="784.0" layoutY="554.0" mnemonicParsing="false" onAction="#SwitchToMainMenuScene" prefHeight="51.0" prefWidth="184.0" text="Cancel">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Button>
-      <Text layoutX="363.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+      <Text layoutX="258.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" textAlignment="RIGHT" wrappingWidth="217.98046874999994">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
       <TextField fx:id="usernameId" layoutX="519.0" layoutY="185.0" prefHeight="32.0" prefWidth="412.0" />
+      <Text layoutX="258.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host IP Address:" textAlignment="RIGHT" wrappingWidth="217.98046874999994">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <TextField fx:id="ipText" layoutX="519.0" layoutY="273.0" prefHeight="32.0" prefWidth="412.0" />
     </children>
 </AnchorPane>
