@@ -168,6 +168,7 @@ class ClientHandler {
                                 playerHealth -= Integer.parseInt(damageStr);
                             server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
                             server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
+                            server.broadcastMessage("GAME DESCRIPTION: " + username + " healed for " + damageStr + " health!");
                         }
                         opponent.startTurn();
                         if (opponent.playerBrace){
@@ -182,6 +183,7 @@ class ClientHandler {
                         else
                             playerMP += 10;
                         server.broadcastMessage("MP STATE " + username + ":" + server.getPlayerMP(server.getClientIndex(username)));
+                        server.broadcastMessage("GAME DESCRIPTION: " + username + " braces for an attack! Also restores 10 mana!");
                         opponent.startTurn();
                         if (opponent.playerBrace){
                             opponent.playerBrace = false;

@@ -11,8 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -76,6 +79,8 @@ public class GameController implements Serializable {
     @FXML
     private TextArea descriptionText;
 
+    private MediaPlayer mediaPlayer;
+
     // ... other GUI elements
 
     public Character player1;
@@ -87,6 +92,11 @@ public class GameController implements Serializable {
         buttons.add(healButton);
         buttons.add(braceButton);
         buttons.add(mpAttackButton);
+
+        Media media = new Media((this.getClass().getResource("/com/tapehat/combat/Sounds/It_will_have_to_do.wav").toExternalForm()));
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
 
         DisableButtons();
 
@@ -115,9 +125,9 @@ public class GameController implements Serializable {
     @FXML
     void onMPAttack(ActionEvent event) {
         try {
-            gameClient.toServer.writeObject("MP ATTACK: 50");
+            gameClient.toServer.writeObject("MP ATTACK: 25");
             gameClient.toServer.flush();
-            gameClient.toServer.writeObject("ATTACK: 100");
+            gameClient.toServer.writeObject("ATTACK: 30");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -128,9 +138,9 @@ public class GameController implements Serializable {
     @FXML
     void onHeal(ActionEvent event) {
         try {
-            gameClient.toServer.writeObject("MP ATTACK: 50");
+            gameClient.toServer.writeObject("MP ATTACK: 15");
             gameClient.toServer.flush();
-            gameClient.toServer.writeObject("ATTACK: -50");
+            gameClient.toServer.writeObject("ATTACK: -20");
             gameClient.toServer.flush();
             DisableButtons();
         } catch (Exception e) {
@@ -232,7 +242,10 @@ public class GameController implements Serializable {
     }
 
     public void CheckMPButtons(){
-        if(player1.getMp() < 50){
+        if(player1.getMp() < 15){
+            healButton.setDisable(true);
+        }
+        else if (player1.getMp() < 25){
             healButton.setDisable(true);
             mpAttackButton.setDisable(true);
         }
