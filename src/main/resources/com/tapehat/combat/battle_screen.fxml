@@ -55,11 +55,16 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Return To Menu">
+                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" onAction="#onDeclineRematch" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Return To Menu">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Button>
+                  <Label fx:id="endGameFeedback" alignment="CENTER" layoutX="214.0" layoutY="303.0" opacity="0.0" prefHeight="37.0" prefWidth="213.0" text="Waiting for opponent..." textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Label alignment="CENTER" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">

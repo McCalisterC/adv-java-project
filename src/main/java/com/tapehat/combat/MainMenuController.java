@@ -1,5 +1,6 @@
 package com.tapehat.combat;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,9 +43,6 @@ public class MainMenuController {
     private TextField usernameId;
 
     @FXML
-    private TextField passwordText;
-
-    @FXML
     public TextField ipText;
 
     @FXML
@@ -54,6 +52,8 @@ public class MainMenuController {
     void onQuitButton(ActionEvent event) {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.close();
+        Platform.exit();
+        System.exit(0);
     }
 
     @FXML
@@ -91,14 +91,12 @@ public class MainMenuController {
         createGameID.setDisable(true);
         portNum.setDisable(true);
         usernameId.setDisable(true);
-        passwordText.setDisable(true);
     }
 
     public void enableUICreate(){
         createGameID.setDisable(false);
         portNum.setDisable(false);
         usernameId.setDisable(false);
-        passwordText.setDisable(false);
     }
 
     public void usernameValidation(){
@@ -204,21 +202,15 @@ public class MainMenuController {
     }
 
     public void cancelButton(ActionEvent event) throws Exception {
-        if(createGameID.isDisabled()){
-            serverManager.stopServer();
-            enableUICreate();
+        if (serverManager != null){
+            if(createGameID.isDisabled()){
+                serverManager.stopServer();
+                enableUICreate();
+            }
         }
         else {
             SwitchToMainMenuScene(event);
         }
-    }
-
-    public void SwitchToBattleScene(ActionEvent event) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("battle_screen.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void SwitchToMainMenuScene(ActionEvent event) throws Exception {

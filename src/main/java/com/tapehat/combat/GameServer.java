@@ -35,6 +35,18 @@ public class GameServer {
                    client.getOpponent(clients);
                 }
                 clients.get(0).startTurn();
+                new Thread(() -> {
+                    while(true){
+                        if (clients.isEmpty()){
+                            try {
+                                System.out.println("Players left, server closing.");
+                                server.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }).start();
             }
             else{
                 System.out.println("Waiting for client");
@@ -184,13 +196,21 @@ class ClientHandler {
                             opponent.playerHealth = 100;
                             opponent.playerMP = 100;
                         }
-                        else
+                        else{
                             playAgain = true;
+                            oos.writeObject("WAITING FOR OPPONENT");
+                        }
+                    }
+                    if (message.equals("DECLINE REMATCH")){
+                        opponent.oos.writeObject("REMATCH DECLINED");
+                        server.stopServer();
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
             catch (Exception e){
                 e.printStackTrace();
+                server.broadcastMessage("GAME OVER (DISCONNECT): " + opponent.username);
             }
         }).start();
     }

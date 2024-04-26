@@ -1,5 +1,6 @@
 package com.tapehat.combat;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ public class GameController implements Serializable {
     private Stage stage;
     private Scene scene;
     public boolean won;
+    public boolean serverAvailable;
 
     @FXML
     private Pane battleScreen; // Connect to the battle screen in your FXML
@@ -65,6 +67,9 @@ public class GameController implements Serializable {
     private Button returnToMenuButton;
 
     @FXML
+    private Label endGameFeedback;
+
+    @FXML
     private Pane endGamePane;
 
     // ... other GUI elements
@@ -82,6 +87,7 @@ public class GameController implements Serializable {
         DisableButtons();
 
         this.gameClient = gameClient;
+        serverAvailable = true;
 
         player1 = new Character(gameClient.userName, 100, 100);
         player2 = new Character(gameClient.opponentUserName, 100, 100);
@@ -177,7 +183,7 @@ public class GameController implements Serializable {
         player2MpLabel.setText(player2.getName() + " MP: " + player2.getMp());
     }
 
-    public void EndGame(boolean endGame){
+    public void EndGame(boolean endGame, boolean disconnect){
         DisableButtons();
         endGamePane.setDisable(false);
         endGamePane.setVisible(true);
@@ -190,13 +196,23 @@ public class GameController implements Serializable {
             won = false;
         }
         playAgainButton.setOpacity(1);
-        playAgainButton.setDisable(false);
+        if (disconnect){
+            playAgainButton.setDisable(true);
+            Platform.runLater(() -> {
+                endGameFeedback.setOpacity(1);
+                endGameFeedback.setText("Opponent Disconnected");
+            });
+        }
+        else {
+            playAgainButton.setDisable(false);
+        }
         returnToMenuButton.setOpacity(1);
         returnToMenuButton.setDisable(false);
     }
 
     public void onPlayAgain(ActionEvent event) throws IOException {
         gameClient.toServer.writeObject("PLAY AGAIN");
+        playAgainButton.setDisable(true);
     }
 
     public void Restart() throws IOException {
@@ -205,6 +221,7 @@ public class GameController implements Serializable {
         winText.setOpacity(0);
         loseText.setOpacity(0);
         playAgainButton.setOpacity(0);
+        endGameFeedback.setOpacity(0);
         playAgainButton.setDisable(true);
         returnToMenuButton.setOpacity(0);
         returnToMenuButton.setDisable(true);
@@ -215,6 +232,24 @@ public class GameController implements Serializable {
             healButton.setDisable(true);
             mpAttackButton.setDisable(true);
         }
+    }
+
+    public void WaitingForOpponentMessage(){
+        endGameFeedback.setOpacity(1);
+        endGameFeedback.setText("Waiting for opponent...");
+    }
+
+    public void onRematchDeclined(){
+        playAgainButton.setDisable(true);
+        endGameFeedback.setOpacity(1);
+        endGameFeedback.setText("Rematch declined...");
+    }
+
+    public void onDeclineRematch(ActionEvent event) throws Exception {
+        if (serverAvailable)
+            gameClient.toServer.writeObject("DECLINE REMATCH");
+        SwitchToMainMenuScene(event);
+        gameClient.closeConnection(gameClient.socket);
     }
 
     public void updateDescriptionText(String text){
