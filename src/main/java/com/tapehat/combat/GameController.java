@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -71,6 +72,9 @@ public class GameController implements Serializable {
 
     @FXML
     private Pane endGamePane;
+
+    @FXML
+    private TextArea descriptionText;
 
     // ... other GUI elements
 
@@ -253,6 +257,6 @@ public class GameController implements Serializable {
     }
 
     public void updateDescriptionText(String text){
-        //descriptionText.setText(text);
+        descriptionText.setText(text);
     }
 }
