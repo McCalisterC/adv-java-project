@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tapehat.combat.GameController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tapehat.combat.GameController">
    <children>
-       <Pane fx:id="battleScreen" prefHeight="720.0" prefWidth="1280.0">
+       <Pane fx:id="battleScreen" layoutX="1.0" layoutY="3.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="1.14642333984375" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
          <children>
-              <Label fx:id="player1HpLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 HP: 100">
+              <Label fx:id="player1HpLabel" alignment="CENTER" layoutX="26.0" layoutY="172.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 HP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Label fx:id="player2HpLabel" alignment="CENTER" layoutX="966.0" layoutY="14.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 HP: 100">
+              <Label fx:id="player2HpLabel" alignment="CENTER" layoutX="753.0" layoutY="172.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 HP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Button fx:id="attackButton" layoutX="66.0" layoutY="145.0" onAction="#onAttack" prefHeight="57.0" prefWidth="200.0" text="Attack">
+              <Button fx:id="attackButton" layoutX="23.0" layoutY="549.0" onAction="#onAttack" prefHeight="50.0" prefWidth="100.0" text="Attack">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-              <Button fx:id="healButton" layoutX="63.0" layoutY="477.0" onAction="#onHeal" prefHeight="57.0" prefWidth="200.0" text="Heal">
+              <Button fx:id="healButton" layoutX="223.0" layoutY="630.0" onAction="#onHeal" prefHeight="50.0" prefWidth="100.0" text="Heal">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-            <Label fx:id="player1MpLabel" alignment="CENTER" layoutX="14.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 MP: 100">
+            <Label fx:id="player1MpLabel" alignment="CENTER" layoutX="26.0" layoutY="202.0" prefHeight="30.0" prefWidth="300.0" text="Player 1 MP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="player2MpLabel" alignment="CENTER" layoutX="966.0" layoutY="44.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
+            <Label fx:id="player2MpLabel" alignment="CENTER" layoutX="753.0" layoutY="202.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -67,26 +72,47 @@
                   </Label>
                </children>
             </Pane>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="104.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">
+            <Label alignment="CENTER" layoutX="-77.0" layoutY="511.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="346.0" prefHeight="30.0" prefWidth="300.0" text="Mana Skills">
+            <Label alignment="CENTER" layoutX="123.0" layoutY="511.0" prefHeight="30.0" prefWidth="300.0" text="Mana Skills">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="braceButton" layoutX="66.0" layoutY="236.0" onAction="#onBrace" prefHeight="57.0" prefWidth="200.0" text="Brace">
+            <Button fx:id="braceButton" layoutX="23.0" layoutY="630.0" onAction="#onBrace" prefHeight="50.0" prefWidth="100.0" text="Brace">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="mpAttackButton" layoutX="63.0" layoutY="388.0" onAction="#onMPAttack" prefHeight="57.0" prefWidth="200.0" text="Magic Attack">
+            <Button fx:id="mpAttackButton" layoutX="223.0" layoutY="549.0" onAction="#onMPAttack" prefHeight="50.0" prefWidth="100.0" text="Magic ">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
+            <ImageView fitHeight="150.0" fitWidth="300.0" layoutX="42.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Sprites/BattleStation(Black).png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="300.0" layoutX="743.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Sprites/BattleStation(Black).png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="BlueSprite" fitHeight="150.0" fitWidth="200.0" layoutX="130.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Sprites/Sprite_Blue.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="RedSprite" fitHeight="150.0" fitWidth="200.0" layoutX="857.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Sprites/Sprite_Red.png" />
+               </image>
+            </ImageView>
+            <TextArea editable="false" layoutX="335.0" layoutY="511.0" prefHeight="200.0" prefWidth="850.0" />
          </children>
       </Pane>
    </children>
