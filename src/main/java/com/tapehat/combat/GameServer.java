@@ -216,7 +216,8 @@ class ClientHandler {
             }
             catch (Exception e){
                 e.printStackTrace();
-                server.broadcastMessage("GAME OVER (DISCONNECT): " + opponent.username);
+                if (opponent != null)
+                    server.broadcastMessage("GAME OVER (DISCONNECT): " + opponent.username);
             }
         }).start();
     }

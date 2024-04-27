@@ -208,6 +208,7 @@ public class MainMenuController {
         if (serverManager != null){
             if(createGameID.isDisabled()){
                 serverManager.stopServer();
+                serverManager = null;
                 enableUICreate();
             }
         }
