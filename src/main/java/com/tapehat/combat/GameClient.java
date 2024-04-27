@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class GameClient implements Serializable {
     String IP;
@@ -90,12 +88,19 @@ public class GameClient implements Serializable {
                             }
                         }
                         else if (message.startsWith("GAME OVER (DISCONNECT): ")){
-                            System.out.println(message.substring("GAME OVER (DISCONNECT): ".length()));
                             if (message.substring("GAME OVER (DISCONNECT): ".length()).equals(userName)){
                                 handleEndGameMessage(true, true);
                             }
                             else {
                                 handleEndGameMessage(false, true);
+                            }
+                        }
+                        else if (message.startsWith("GAME OVER (SURRENDER): ")){
+                            if (message.substring("GAME OVER (SURRENDER): ".length()).equals(opponentUserName)){
+                                handleSurrender(true);
+                            }
+                            else {
+                                handleSurrender(false);
                             }
                         }
                         else if (message.equals("SERVER SHUTTING DOWN")){
@@ -109,10 +114,30 @@ public class GameClient implements Serializable {
                             handleDescriptionMessage(message);
                         }
                         else if (message.equals("WAITING FOR OPPONENT")){
-                            gameController.WaitingForOpponentMessage();
+                            Platform.runLater(() -> gameController.WaitingForOpponentMessage());
                         }
                         else if (message.equals("REMATCH DECLINED")){
                             Platform.runLater(() -> gameController.onRematchDeclined());
+                        }
+                        else if (message.startsWith("PLAYER: ")){
+                            if (message.substring("PLAYER: ".length()).equals("1")){
+                                Platform.runLater(() -> {
+                                    try {
+                                        gameController.setPlayer1Sprite(true);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                            }
+                            else{
+                                Platform.runLater(() -> {
+                                    try {
+                                        gameController.setPlayer1Sprite(false);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                            }
                         }
                         else{
                             opponentUserName = message;
@@ -136,6 +161,11 @@ public class GameClient implements Serializable {
     public void handleEndGameMessage(boolean won, boolean disconnect){
         gameOver = true;
         gameController.EndGame(won, disconnect);
+    }
+
+    public void handleSurrender(boolean won){
+        gameOver = true;
+        gameController.EndGameSurrender(won);
     }
 
     public void handleGameStateMessage(String message){

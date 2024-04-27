@@ -10,11 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URISyntaxException;
 
 
 public class MainMenuController {
@@ -57,7 +60,7 @@ public class MainMenuController {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() throws URISyntaxException {
         portValidation();
         usernameValidation();
         ipValidation();

@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class GameServer {
@@ -35,6 +34,8 @@ public class GameServer {
                    client.getOpponent(clients);
                 }
                 clients.get(0).startTurn();
+                clients.get(0).oos.writeObject("PLAYER: 1");
+                clients.get(1).oos.writeObject("PLAYER: 2");
                 new Thread(() -> {
                     while(true){
                         if (clients.isEmpty()){
@@ -168,7 +169,7 @@ class ClientHandler {
                                 playerHealth -= Integer.parseInt(damageStr);
                             server.broadcastMessage("GAME STATE " + username + ":" + server.getPlayerHP(server.getClientIndex(username)));
                             server.broadcastMessage("GAME STATE " + opponent.username + ":" + server.getPlayerHP(server.getClientIndex(opponent.username)));
-                            server.broadcastMessage("GAME DESCRIPTION: " + username + " healed for " + damageStr + " health!");
+                            server.broadcastMessage("GAME DESCRIPTION: " + username + " healed for " + Math.abs(Integer.parseInt(damageStr)) + " health!");
                         }
                         opponent.startTurn();
                         if (opponent.playerBrace){
@@ -207,6 +208,9 @@ class ClientHandler {
                         opponent.oos.writeObject("REMATCH DECLINED");
                         server.stopServer();
                         Thread.currentThread().interrupt();
+                    }
+                    if (message.equals("SURRENDER")){
+                        server.broadcastMessage("GAME OVER (SURRENDER): " + username);
                     }
                 }
             }

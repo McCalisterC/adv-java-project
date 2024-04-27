@@ -9,13 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +30,9 @@ public class GameController implements Serializable {
     private Scene scene;
     public boolean won;
     public boolean serverAvailable;
+    private float volume;
+    int currentVolume = 50;
+    int maxVolume = 100;
 
     @FXML
     private Pane battleScreen; // Connect to the battle screen in your FXML
@@ -79,6 +84,18 @@ public class GameController implements Serializable {
     @FXML
     private TextArea descriptionText;
 
+    @FXML
+    private Slider volumeSlider;
+
+    @FXML
+    private ImageView player1Sprite;
+
+    @FXML
+    private ImageView player2Sprite;
+
+    @FXML
+    private Label surrenderConfirmText;
+
     private MediaPlayer mediaPlayer;
 
     // ... other GUI elements
@@ -86,6 +103,14 @@ public class GameController implements Serializable {
     public Character player1;
     public Character player2;
     private GameClient gameClient; // Assuming you have your GameClient handling connection
+
+    @FXML
+    public void initialize(){
+        volumeSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            currentVolume = newValue.intValue();
+            updateVolume();
+        });
+    }
 
     public void start(GameClient gameClient){
         buttons.add(attackButton);
@@ -96,6 +121,8 @@ public class GameController implements Serializable {
         Media media = new Media((this.getClass().getResource("/com/tapehat/combat/Sounds/It_will_have_to_do.wav").toExternalForm()));
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        volume = (float) (Math.log(currentVolume)/Math.log(maxVolume));
+        mediaPlayer.setVolume(currentVolume);
         mediaPlayer.play();
 
         DisableButtons();
@@ -224,6 +251,32 @@ public class GameController implements Serializable {
         returnToMenuButton.setDisable(false);
     }
 
+    public void EndGameSurrender(boolean endGame){
+        DisableButtons();
+        endGamePane.setDisable(false);
+        endGamePane.setVisible(true);
+        if (endGame){
+            winText.setOpacity(1);
+            won = true;
+            Platform.runLater(() -> {
+                endGameFeedback.setOpacity(1);
+                endGameFeedback.setText(player2.getName() + " Surrendered");
+            });
+        }
+        else{
+            loseText.setOpacity(1);
+            won = false;
+            Platform.runLater(() -> {
+                endGameFeedback.setOpacity(1);
+                endGameFeedback.setText("You Surrendered");
+            });
+        }
+        playAgainButton.setOpacity(1);
+        playAgainButton.setDisable(false);
+        returnToMenuButton.setOpacity(1);
+        returnToMenuButton.setDisable(false);
+    }
+
     public void onPlayAgain(ActionEvent event) throws IOException {
         gameClient.toServer.writeObject("PLAY AGAIN");
         playAgainButton.setDisable(true);
@@ -239,14 +292,15 @@ public class GameController implements Serializable {
         playAgainButton.setDisable(true);
         returnToMenuButton.setOpacity(0);
         returnToMenuButton.setDisable(true);
+        surrenderConfirmText.setVisible(false);
     }
 
     public void CheckMPButtons(){
         if(player1.getMp() < 15){
             healButton.setDisable(true);
+            mpAttackButton.setDisable(true);
         }
         else if (player1.getMp() < 25){
-            healButton.setDisable(true);
             mpAttackButton.setDisable(true);
         }
     }
@@ -271,5 +325,32 @@ public class GameController implements Serializable {
 
     public void updateDescriptionText(String text){
         descriptionText.setText(text);
+    }
+
+    public void updateVolume(){
+        volume = (float) (Math.log(currentVolume)/Math.log(maxVolume));
+        mediaPlayer.setVolume(volume);
+    }
+
+    public void setPlayer1Sprite(boolean player1) throws Exception {
+        if (player1){
+            player1Sprite.setImage(new Image(this.getClass().getResource("/com/tapehat/combat/Sprites/Sprite_Blue.png").toURI().toString()));
+            player2Sprite.setImage(new Image(this.getClass().getResource("/com/tapehat/combat/Sprites/Sprite_Red.png").toURI().toString()));
+        }
+        else{
+            player1Sprite.setImage(new Image(this.getClass().getResource("/com/tapehat/combat/Sprites/Sprite_Red.png").toURI().toString()));
+            player1Sprite.setScaleX(player1Sprite.getScaleX() * -1);
+            player2Sprite.setImage(new Image(this.getClass().getResource("/com/tapehat/combat/Sprites/Sprite_Blue.png").toURI().toString()));
+            player2Sprite.setScaleX(player2Sprite.getScaleX() * -1);
+        }
+    }
+
+    public void onSurrender() throws IOException {
+        if (!surrenderConfirmText.isVisible()){
+            surrenderConfirmText.setVisible(true);
+        }
+        else {
+            gameClient.toServer.writeObject("SURRENDER");
+        }
     }
 }

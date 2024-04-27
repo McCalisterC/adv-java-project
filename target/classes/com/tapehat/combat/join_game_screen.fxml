@@ -19,7 +19,7 @@
          </font>
       </Text>
       <TextField fx:id="portNum" layoutX="519.0" layoutY="435.0" prefHeight="32.0" prefWidth="412.0" />
-      <Button fx:id="joinGameID" disable="true" layoutX="482.0" layoutY="523.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="51.0" prefWidth="184.0" text="Join Game">
+      <Button fx:id="joinGameID" disable="true" layoutX="482.0" layoutY="523.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="51.0" prefWidth="184.0" styleClass="buttons" stylesheets="@style.css" text="Join Game" textFill="WHITE">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
@@ -29,7 +29,7 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Button fx:id="cancelId" layoutX="784.0" layoutY="523.0" mnemonicParsing="false" onAction="#SwitchToMainMenuScene" prefHeight="51.0" prefWidth="184.0" text="Cancel">
+      <Button fx:id="cancelId" layoutX="784.0" layoutY="523.0" mnemonicParsing="false" onAction="#SwitchToMainMenuScene" prefHeight="51.0" prefWidth="184.0" styleClass="buttons" stylesheets="@style.css" text="Cancel" textFill="WHITE">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>

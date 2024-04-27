@@ -1,3 +1,15 @@
-.bodybg{
-    -fx-background-image: url("Sprites/IMG_2055.png");
+.buttons{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../combat/Sprites/UI_Button.PNG");
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+.buttons:hover{
+    -fx-background-image: url("../combat/Sprites/UI_Button_Hover.PNG");
+}
+
+.endGamePane{
+    -fx-background-image: url("../combat/Sprites/IMG_2055.png");
+    -fx-background-size: contain;
 }

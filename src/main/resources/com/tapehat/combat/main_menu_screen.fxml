@@ -15,17 +15,17 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <Button id="createButton" layoutX="442.0" layoutY="207.0" mnemonicParsing="false" onAction="#SwitchToCreateGameScene" prefHeight="64.0" prefWidth="270.0" text="Create Game">
+            <Button fx:id="createButton" layoutX="442.0" layoutY="207.0" mnemonicParsing="false" onAction="#SwitchToCreateGameScene" prefHeight="64.0" prefWidth="270.0" styleClass="buttons" stylesheets="@style.css" text="Create Game" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="27.0" />
                </font>
             </Button>
-            <Button id="joinButton" layoutX="442.0" layoutY="289.0" mnemonicParsing="false" onAction="#SwitchToJoinGameScene" prefHeight="64.0" prefWidth="270.0" text="Join Game">
+            <Button fx:id="joinButton" layoutX="442.0" layoutY="289.0" mnemonicParsing="false" onAction="#SwitchToJoinGameScene" prefHeight="64.0" prefWidth="270.0" styleClass="buttons" stylesheets="@style.css" text="Join Game" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="27.0" />
                </font>
             </Button>
-            <Button id="quitButton" layoutX="442.0" layoutY="372.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="64.0" prefWidth="270.0" text="Quit Game">
+            <Button fx:id="quitButton" layoutX="442.0" layoutY="372.0" mnemonicParsing="false" onAction="#onQuitButton" prefHeight="64.0" prefWidth="270.0" styleClass="buttons" stylesheets="@style.css" text="Quit Game" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="27.0" />
                </font>

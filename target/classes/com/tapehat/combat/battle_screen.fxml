@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -18,16 +19,16 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Label fx:id="player2HpLabel" alignment="CENTER" layoutX="753.0" layoutY="172.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 HP: 100">
+              <Label fx:id="player2HpLabel" alignment="CENTER" layoutX="928.0" layoutY="172.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 HP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-              <Button fx:id="attackButton" layoutX="23.0" layoutY="549.0" onAction="#onAttack" prefHeight="50.0" prefWidth="100.0" text="Attack">
+              <Button fx:id="attackButton" layoutX="22.0" layoutY="561.0" onAction="#onAttack" prefHeight="50.0" prefWidth="134.0" styleClass="buttons" stylesheets="@style.css" text="Attack" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
-              <Button fx:id="healButton" layoutX="223.0" layoutY="630.0" onAction="#onHeal" prefHeight="50.0" prefWidth="100.0" text="Heal">
+              <Button fx:id="healButton" layoutX="196.0" layoutY="622.0" onAction="#onHeal" prefHeight="50.0" prefWidth="134.0" styleClass="buttons" stylesheets="@style.css" text="Heal" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Button>
@@ -36,27 +37,27 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="player2MpLabel" alignment="CENTER" layoutX="753.0" layoutY="202.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
+            <Label fx:id="player2MpLabel" alignment="CENTER" layoutX="928.0" layoutY="202.0" prefHeight="30.0" prefWidth="300.0" text="Player 2 MP: 100">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="-77.0" layoutY="511.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">
+            <Label alignment="CENTER" layoutX="-61.0" layoutY="531.0" prefHeight="30.0" prefWidth="300.0" text="Basic Skills">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="123.0" layoutY="511.0" prefHeight="30.0" prefWidth="300.0" text="Mana Skills">
+            <Label alignment="CENTER" layoutX="113.0" layoutY="531.0" prefHeight="30.0" prefWidth="300.0" text="Mana Skills">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="braceButton" layoutX="23.0" layoutY="630.0" onAction="#onBrace" prefHeight="50.0" prefWidth="100.0" text="Brace">
+            <Button fx:id="braceButton" layoutX="22.0" layoutY="622.0" onAction="#onBrace" prefHeight="50.0" prefWidth="134.0" styleClass="buttons" stylesheets="@style.css" text="Brace" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="mpAttackButton" layoutX="223.0" layoutY="549.0" onAction="#onMPAttack" prefHeight="50.0" prefWidth="100.0" text="Magic ">
+            <Button fx:id="mpAttackButton" layoutX="196.0" layoutY="561.0" onAction="#onMPAttack" prefHeight="50.0" prefWidth="134.0" styleClass="buttons" stylesheets="@style.css" text="Magic " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -66,26 +67,42 @@
                   <Image url="@Sprites/BattleStation(Black).png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="300.0" layoutX="743.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="300.0" layoutX="918.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Sprites/BattleStation(Black).png" />
                </image>
             </ImageView>
-            <ImageView fx:id="BlueSprite" fitHeight="150.0" fitWidth="200.0" layoutX="130.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="player1Sprite" fitHeight="150.0" fitWidth="200.0" layoutX="146.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Sprites/Sprite_Blue.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="RedSprite" fitHeight="150.0" fitWidth="200.0" layoutX="857.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="player2Sprite" fitHeight="150.0" fitWidth="200.0" layoutX="1022.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Sprites/Sprite_Red.png" />
                </image>
             </ImageView>
-            <TextArea fx:id="descriptionText" editable="false" layoutX="335.0" layoutY="511.0" prefHeight="200.0" prefWidth="850.0">
+            <TextArea fx:id="descriptionText" editable="false" layoutX="335.0" layoutY="511.0" prefHeight="200.0" prefWidth="928.0" wrapText="true">
                <font>
                   <Font size="40.0" />
                </font></TextArea>
-            <Pane fx:id="endGamePane" disable="true" layoutX="123.0" layoutY="91.0" prefHeight="539.0" prefWidth="1035.0" style="-fx-background-color: black;" visible="false">
+            <Slider fx:id="volumeSlider" layoutX="570.0" layoutY="50.0" showTickMarks="true" value="50.0" />
+            <Label alignment="CENTER" layoutX="490.0" layoutY="14.0" prefHeight="30.0" prefWidth="300.0" text="Music Volume">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Button layoutX="1088.0" layoutY="19.0" onAction="#onSurrender" prefHeight="50.0" prefWidth="140.0" styleClass="buttons" stylesheets="@style.css" text="Surrender" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Button>
+            <Label fx:id="surrenderConfirmText" alignment="CENTER" layoutX="1047.0" layoutY="76.0" prefHeight="30.0" prefWidth="223.0" text="Click Again to Confirm" visible="false">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Pane fx:id="endGamePane" disable="true" layoutX="123.0" layoutY="91.0" prefHeight="539.0" prefWidth="1035.0" styleClass="endGamePane" stylesheets="@style.css" visible="false">
                <children>
                   <Label fx:id="loseText" layoutX="320.0" layoutY="109.0" opacity="0.0" text="YOU LOSE!" textFill="WHITE">
                      <font>
@@ -97,17 +114,17 @@
                         <Font name="System Bold" size="78.0" />
                      </font>
                   </Label>
-                  <Button fx:id="playAgainButton" defaultButton="true" layoutX="214.0" layoutY="349.0" onAction="#onPlayAgain" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Play Again">
+                  <Button fx:id="playAgainButton" defaultButton="true" layoutX="214.0" layoutY="349.0" onAction="#onPlayAgain" opacity="0.0" prefHeight="57.0" prefWidth="213.0" styleClass="buttons" stylesheets="@style.css" text="Play Again" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" onAction="#onDeclineRematch" opacity="0.0" prefHeight="57.0" prefWidth="213.0" text="Return To Menu">
+                  <Button fx:id="returnToMenuButton" defaultButton="true" layoutX="608.0" layoutY="349.0" onAction="#onDeclineRematch" opacity="0.0" prefHeight="57.0" prefWidth="213.0" styleClass="buttons" stylesheets="@style.css" text="Return To Menu" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Label fx:id="endGameFeedback" alignment="CENTER" layoutX="214.0" layoutY="303.0" opacity="0.0" prefHeight="37.0" prefWidth="213.0" text="Waiting for opponent..." textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="endGameFeedback" alignment="CENTER" layoutX="309.0" layoutY="282.0" opacity="0.0" prefHeight="37.0" prefWidth="416.0" text="Waiting for opponent..." textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

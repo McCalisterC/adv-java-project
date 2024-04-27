@@ -22,7 +22,7 @@
                </font>
             </Text>
             <TextField fx:id="portNum" layoutX="506.0" layoutY="340.0" prefHeight="32.0" prefWidth="412.0" />
-            <Button fx:id="createGameID" disable="true" layoutX="454.0" layoutY="454.0" mnemonicParsing="false" onAction="#onCreateGame" prefHeight="51.0" prefWidth="184.0" text="Create Game">
+            <Button fx:id="createGameID" disable="true" layoutX="454.0" layoutY="454.0" mnemonicParsing="false" onAction="#onCreateGame" prefHeight="51.0" prefWidth="184.0" styleClass="buttons" stylesheets="@style.css" text="Create Game" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -32,7 +32,7 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <Button fx:id="cancelId" layoutX="756.0" layoutY="454.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="51.0" prefWidth="184.0" text="Cancel">
+            <Button fx:id="cancelId" layoutX="756.0" layoutY="454.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="51.0" prefWidth="184.0" styleClass="buttons" stylesheets="@style.css" text="Cancel" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
